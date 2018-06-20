@@ -14,7 +14,8 @@ class FamousPeople extends Component {
     this.state = { famousPerson: 
       { name:'',
         role: '', 
-      } 
+      } ,
+      famousPeopleArray: [],
     };
 
   }
@@ -27,35 +28,41 @@ handleChangeFor =(property) => (event) => {
 }
 });
 }
-handleSubmit =(property) => (event) => {
+handleSubmit = (event)=> {
     event.preventDefault();
-    console.log(this.state.famousPerson)
-let newFamousPerson = new FamousPeople(this.state.famousPerson.name, this.state.famousPerson.role);
-return newFamousPerson;
-    
+    this.setState({famousPeopleArray: [
+        ...this.state.famousPeopleArray, this.state.famousPerson
+    ]});
+    this.setState({famousPerson: {
+        name: '',
+        role:'',
+    }}); 
 }
   render() {
     return (
-      <div>
-        <h2>This Celebrity</h2>
-        <p>Stars Name</p>
-        <input onChange={this.handleChangeFor('name')} />
-        <p>Famous Role</p>
-        <input onChange={this.handleChangeFor('role')}  />
-        
-        <p>{this.state.famousPerson.name} is famous for -</p>
+        <div>
+            <h2>This Celebrity</h2>
+            <form onSubmit={this.handleSubmit}>
+                <p>Stars Name</p>
+                    <input onChange={this.handleChangeFor('name')} value={this.state.famousPerson.name} />
+                <p>Famous Role</p>
+                    <input onChange={this.handleChangeFor('role')} value={this.state.famousPerson.role} />
+                
+                <p>{this.state.famousPerson.name} is famous for -</p>
 
-        <p>{this.state.famousPerson.role}</p>
-
-        <form ref="form" onSubmit={this.handleSubmit}>
-    <button type="submit">Submit to Form</button>
-</form>
-<ul>    
-    <li>{ this.state.famousPerson.name } is famous for { this.state.famousPerson.role }</li>
-    </ul>
+                <p>{this.state.famousPerson.role}</p>
+            
+                    <input type="submit" value="Submit" />
+            </form>
+            <ul>    
+                {this.state.famousPeopleArray.map(person =>
+                <li>{ person.name } is famous for { person.role} </li>
+                
+                )}
+            </ul>
+            
         
-    
-      </div>
+        </div>
       
     );
   }
